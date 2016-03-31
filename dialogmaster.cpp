@@ -22,12 +22,7 @@ bool DialogMaster::TitleAsWindowTitle = false;
 
 void DialogMaster::masterDialog(QDialog *dialog, bool fixedSize, Qt::WindowFlags additionalFlags)
 {
-	Qt::WindowFlags flags = Qt::WindowTitleHint |
-							Qt::WindowSystemMenuHint |
-							Qt::WindowCloseButtonHint |
-							(fixedSize ? Qt::MSWindowsFixedSizeDialogHint : Qt::Window) |
-							additionalFlags;
-
+	Qt::WindowFlags flags = (fixedSize ? Qt::MSWindowsFixedSizeDialogHint : Qt::Window) | additionalFlags;
 	dialog->setSizeGripEnabled(!fixedSize);
 	if(dialog->parentWidget()) {
 		dialog->setWindowModality(Qt::WindowModal);
@@ -67,7 +62,7 @@ QMessageBox::StandardButton DialogMaster::msgBox(QWidget *parent, DialogMaster::
 	msgBox.setDetailedText(details);
 
 #ifdef Q_OS_WINCE
-	Qt::WindowFlags flags = 0;
+	Qt::WindowFlags flags = DialogMaster::DefaultFlags;
 	if(buttons.testFlag(QMessageBox::Ok))
 		flags |= Qt::WindowOkButtonHint;
 	if(buttons.testFlag(QMessageBox::Cancel))
@@ -357,23 +352,10 @@ QString DialogMaster::getText(QWidget *parent, const QString &label, const QStri
 QProgressDialog *DialogMaster::createProgress(QWidget *parent, const QString &label, const int max, const int min, bool allowCancel, const QString &windowTitle, int minimumDuration, const QString &cancelButtonText)
 {
 	QProgressDialog *dialog = new QProgressDialog(parent);
-	Qt::WindowFlags flags = Qt::CustomizeWindowHint |
-							Qt::MSWindowsFixedSizeDialogHint |
-							Qt::WindowTitleHint;
-
-	if(parent) {
-		dialog->setWindowModality(Qt::WindowModal);
-		flags |= Qt::Sheet;
-	} else {
-		dialog->setWindowModality(Qt::ApplicationModal);
-		flags |= Qt::Dialog;
-	}
-
-	dialog->setWindowFlags(flags);
+	DialogMaster::masterDialog(dialog, true, Qt::CustomizeWindowHint | Qt::WindowTitleHint);
 	dialog->setWindowTitle(windowTitle.isEmpty() ?
 							   (parent ? parent->windowTitle() : QString()) :
 							   windowTitle);
-	dialog->setSizeGripEnabled(false);
 
 	if(max == min && max == 0) {
 		QProgressBar *bar = new QProgressBar(dialog);

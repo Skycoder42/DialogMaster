@@ -11,7 +11,9 @@ class QProgressDialog;
 namespace DialogMaster
 {
 	// ---------- QDialog ----------
-	void masterDialog(QDialog *dialog, bool fixedSize = false, Qt::WindowFlags additionalFlags = 0);
+	static const Qt::WindowFlags DefaultFlags = (Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
+
+	void masterDialog(QDialog *dialog, bool fixedSize = false, Qt::WindowFlags additionalFlags = DialogMaster::DefaultFlags);
 
 	// ---------- QMessageBox ----------
 	extern bool TitleAsWindowTitle;
