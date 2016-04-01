@@ -16,8 +16,6 @@ namespace DialogMaster
 	void masterDialog(QDialog *dialog, bool fixedSize = false, Qt::WindowFlags additionalFlags = DialogMaster::DefaultFlags);
 
 	// ---------- QMessageBox ----------
-	extern bool TitleAsWindowTitle;
-
 	struct MessageBoxIcon {
 		bool isCustom;
 		QMessageBox::Icon mbxIcon;
@@ -28,17 +26,24 @@ namespace DialogMaster
 		MessageBoxIcon(const QIcon &custIcon);
 	};
 
-	QMessageBox::StandardButton msgBox(QWidget *parent,
-									   MessageBoxIcon icon,
-									   const QString &text,
-									   const QString &title = QString(),
-									   const QString &windowTitle = QString(),
-									   const QString &details = QString(),
-									   bool *checked = NULL,
-									   const QString &checkString = QString(),
-									   QMessageBox::StandardButtons buttons = QMessageBox::Ok,
-									   QMessageBox::StandardButton defaultButton = QMessageBox::Ok,
-									   QMessageBox::StandardButton escapeButton = QMessageBox::Cancel);
+	struct MessageBoxInfo {
+		QWidget *parent;
+		MessageBoxIcon icon;
+		QString text;
+		QString title;
+		QString windowTitle;
+		QString details;
+		bool *checked;
+		QString checkString;
+		QMessageBox::StandardButtons buttons;
+		QMessageBox::StandardButton defaultButton;
+		QMessageBox::StandardButton escapeButton;
+		QHash<QMessageBox::StandardButton, QString> buttonTexts;
+
+		MessageBoxInfo();
+	};
+
+	QMessageBox::StandardButton msgBox(const MessageBoxInfo &setup);
 
 
 

@@ -18,8 +18,6 @@ public:
 	}
 };
 
-bool DialogMaster::TitleAsWindowTitle = false;
-
 void DialogMaster::masterDialog(QDialog *dialog, bool fixedSize, Qt::WindowFlags additionalFlags)
 {
 	Qt::WindowFlags flags = (fixedSize ? Qt::MSWindowsFixedSizeDialogHint : Qt::Window) | additionalFlags;
@@ -34,38 +32,60 @@ void DialogMaster::masterDialog(QDialog *dialog, bool fixedSize, Qt::WindowFlags
 	dialog->setWindowFlags(flags);
 }
 
-QMessageBox::StandardButton DialogMaster::msgBox(QWidget *parent, DialogMaster::MessageBoxIcon icon, const QString &text, const QString &title, const QString &windowTitle, const QString &details, bool *checked, const QString &checkString, QMessageBox::StandardButtons buttons, QMessageBox::StandardButton defaultButton, QMessageBox::StandardButton escapeButton)
+DialogMaster::MessageBoxInfo::MessageBoxInfo() :
+	parent(Q_NULLPTR),
+	icon(QMessageBox::NoIcon),
+	text(),
+	title(),
+	windowTitle(),
+	details(),
+	checked(Q_NULLPTR),
+	checkString(),
+	buttons(),
+	defaultButton(QMessageBox::Ok),
+	escapeButton(QMessageBox::Escape),
+	buttonTexts()
+{}
+
+QMessageBox::StandardButton DialogMaster::msgBox(const MessageBoxInfo &setup)
 {
-	QMessageBox msgBox(parent);
-	if(icon.isCustom)
-		msgBox.setIconPixmap(icon.custIcon);
+	QMessageBox msgBox(setup.parent);
+	if(setup.icon.isCustom)
+		msgBox.setIconPixmap(setup.icon.custIcon);
 	else
-		msgBox.setIcon(icon.mbxIcon);
-	msgBox.setWindowTitle(DialogMaster::TitleAsWindowTitle ? title : windowTitle);
-	if(DialogMaster::TitleAsWindowTitle || title.isEmpty())
-		msgBox.setText(text);
+		msgBox.setIcon(setup.icon.mbxIcon);
+	msgBox.setWindowTitle(setup.windowTitle);
+	if(setup.title.isEmpty())
+		msgBox.setText(setup.text);
 	else {
-		msgBox.setText(QStringLiteral("<b>%1</b>").arg(title));
-		msgBox.setInformativeText(text);
+		msgBox.setText(QStringLiteral("<b>%1</b>").arg(setup.title));
+		msgBox.setInformativeText(setup.text);
 	}
-	if(checked) {
-		QCheckBox *box = new QCheckBox(checkString, &msgBox);
-		box->setChecked(*checked);
-		QObject::connect(box, &QCheckBox::toggled, &msgBox, [checked](bool isChecked){
-			*checked = isChecked;
+	if(setup.checked) {
+		QCheckBox *box = new QCheckBox(setup.checkString, &msgBox);
+		box->setChecked(*setup.checked);
+		QObject::connect(box, &QCheckBox::toggled, &msgBox, [&](bool isChecked){
+			*setup.checked = isChecked;
 		});
 		msgBox.setCheckBox(box);
 	}
-	msgBox.setStandardButtons(buttons);
-	msgBox.setDefaultButton(defaultButton);
-	msgBox.setEscapeButton(escapeButton);
-	msgBox.setDetailedText(details);
+	msgBox.setStandardButtons(setup.buttons);
+	msgBox.setDefaultButton(setup.defaultButton);
+	msgBox.setEscapeButton(setup.escapeButton);
+	msgBox.setDetailedText(setup.details);
+
+	for(QHash<QMessageBox::StandardButton, QString>::const_iterator it = setup.buttonTexts.constBegin(),
+																	end = setup.buttonTexts.constEnd();
+		it != end;
+		++it) {
+		msgBox.setButtonText(it.key(), it.value());
+	}
 
 #ifdef Q_OS_WINCE
 	Qt::WindowFlags flags = DialogMaster::DefaultFlags;
-	if(buttons.testFlag(QMessageBox::Ok))
+	if(setup.buttons.testFlag(QMessageBox::Ok))
 		flags |= Qt::WindowOkButtonHint;
-	if(buttons.testFlag(QMessageBox::Cancel))
+	if(setup.buttons.testFlag(QMessageBox::Cancel))
 		flags |= Qt::WindowCancelButtonHint;
 	DialogMaster::masterDialog(&msgBox, true, flags);
 #else
@@ -77,17 +97,15 @@ QMessageBox::StandardButton DialogMaster::msgBox(QWidget *parent, DialogMaster::
 
 QMessageBox::StandardButton DialogMaster::information(QWidget *parent, const QString &text, const QString &title, const QString &windowTitle, QMessageBox::StandardButtons buttons, QMessageBox::StandardButton defaultButton, QMessageBox::StandardButton escapeButton)
 {
-	return msgBox(parent,
-				  QMessageBox::Information,
-				  text,
-				  title,
-				  windowTitle.isEmpty() ? QCoreApplication::translate("DialogMaster", "Information") : windowTitle,
-				  QString(),
-				  NULL,
-				  QString(),
-				  buttons,
-				  defaultButton,
-				  escapeButton);
+	MessageBoxInfo info;
+	info.parent = parent;
+	info.text = text;
+	info.title = title;
+	info.windowTitle = windowTitle.isEmpty() ? QCoreApplication::translate("DialogMaster", "Information") : windowTitle;
+	info.buttons = buttons;
+	info.defaultButton = defaultButton;
+	info.escapeButton = escapeButton;
+	return msgBox(info);
 }
 
 QMessageBox::StandardButton DialogMaster::information(QWidget *parent, const QString &text, const QString &title, const QString &windowTitle, QMessageBox::StandardButton button1, QMessageBox::StandardButton button2)
