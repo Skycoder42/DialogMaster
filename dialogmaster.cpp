@@ -264,7 +264,7 @@ DialogMaster::MessageBoxIcon::MessageBoxIcon(const QPixmap &custIcon) :
 DialogMaster::MessageBoxIcon::MessageBoxIcon(const QIcon &custIcon) :
 	isCustom(true),
 	mbxIcon(),
-	custIcon(custIcon.pixmap(64, 64))//TODO hdpi
+	custIcon(custIcon.pixmap(64, 64))
 {}
 
 double DialogMaster::getDouble(QWidget *parent, const QString &label, double value, double min, double max, const QString &title, int decimals, bool *ok)
