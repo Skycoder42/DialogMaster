@@ -21,7 +21,7 @@ namespace DialogMaster
 		QMessageBox::Icon mbxIcon;
 		QPixmap custIcon;
 
-		MessageBoxIcon(QMessageBox::Icon mbxIcon);
+		MessageBoxIcon(QMessageBox::Icon mbxIcon = QMessageBox::NoIcon);
 		MessageBoxIcon(const QPixmap &custIcon);
 		MessageBoxIcon(const QIcon &custIcon);
 	};
@@ -43,6 +43,7 @@ namespace DialogMaster
 		MessageBoxInfo();
 	};
 
+	QMessageBox *createMsgBox(const MessageBoxInfo &setup);
 	QMessageBox::StandardButton msgBox(const MessageBoxInfo &setup);
 
 
@@ -53,14 +54,16 @@ namespace DialogMaster
 											const QString &windowTitle = QString(),
 											QMessageBox::StandardButtons buttons = QMessageBox::Ok,
 											QMessageBox::StandardButton defaultButton = QMessageBox::Ok,
-											QMessageBox::StandardButton escapeButton = QMessageBox::Cancel);
+											QMessageBox::StandardButton escapeButton = QMessageBox::Ok);
 
-	QMessageBox::StandardButton information(QWidget *parent,
-											const QString &text,
-											const QString &title,
-											const QString &windowTitle,
-											QMessageBox::StandardButton button1,
-											QMessageBox::StandardButton button2);
+	QMessageBox::StandardButton informationT(QWidget *parent,
+											 const QString &windowTitle,
+											 const QString &text,
+											 QMessageBox::StandardButtons buttons = QMessageBox::Ok,
+											 QMessageBox::StandardButton defaultButton = QMessageBox::Ok,
+											 QMessageBox::StandardButton escapeButton = QMessageBox::Ok);
+
+	MessageBoxInfo createInformation(const QString &text = QString(), QWidget *parent = Q_NULLPTR);
 
 	QMessageBox::StandardButton question(QWidget *parent,
 										 const QString &text,
@@ -70,12 +73,14 @@ namespace DialogMaster
 										 QMessageBox::StandardButton defaultButton = QMessageBox::Yes,
 										 QMessageBox::StandardButton escapeButton = QMessageBox::No);
 
-	QMessageBox::StandardButton question(QWidget *parent,
-										 const QString &text,
-										 const QString &title,
+	QMessageBox::StandardButton questionT(QWidget *parent,
 										 const QString &windowTitle,
-										 QMessageBox::StandardButton button1,
-										 QMessageBox::StandardButton button2);
+										 const QString &text,
+										 QMessageBox::StandardButtons buttons = QMessageBox::StandardButtons(QMessageBox::Yes | QMessageBox::No),
+										 QMessageBox::StandardButton defaultButton = QMessageBox::Yes,
+										 QMessageBox::StandardButton escapeButton = QMessageBox::No);
+
+	MessageBoxInfo createQuestion(const QString &text = QString(), QWidget *parent = Q_NULLPTR);
 
 	QMessageBox::StandardButton warning(QWidget *parent,
 										const QString &text,
@@ -83,14 +88,16 @@ namespace DialogMaster
 										const QString &windowTitle = QString(),
 										QMessageBox::StandardButtons buttons = QMessageBox::Ok,
 										QMessageBox::StandardButton defaultButton = QMessageBox::Ok,
-										QMessageBox::StandardButton escapeButton = QMessageBox::Cancel);
+										QMessageBox::StandardButton escapeButton = QMessageBox::Ok);
 
-	QMessageBox::StandardButton warning(QWidget *parent,
-										const QString &text,
-										const QString &title,
-										const QString &windowTitle,
-										QMessageBox::StandardButton button1,
-										QMessageBox::StandardButton button2);
+	QMessageBox::StandardButton warningT(QWidget *parent,
+										 const QString &windowTitle,
+										 const QString &text,
+										 QMessageBox::StandardButtons buttons = QMessageBox::Ok,
+										 QMessageBox::StandardButton defaultButton = QMessageBox::Ok,
+										 QMessageBox::StandardButton escapeButton = QMessageBox::Ok);
+
+	MessageBoxInfo createWarning(const QString &text = QString(), QWidget *parent = Q_NULLPTR);
 
 	QMessageBox::StandardButton critical(QWidget *parent,
 										 const QString &text,
@@ -98,14 +105,16 @@ namespace DialogMaster
 										 const QString &windowTitle = QString(),
 										 QMessageBox::StandardButtons buttons = QMessageBox::Ok,
 										 QMessageBox::StandardButton defaultButton = QMessageBox::Ok,
-										 QMessageBox::StandardButton escapeButton = QMessageBox::Cancel);
+										 QMessageBox::StandardButton escapeButton = QMessageBox::Ok);
 
-	QMessageBox::StandardButton critical(QWidget *parent,
-										 const QString &text,
-										 const QString &title,
-										 const QString &windowTitle,
-										 QMessageBox::StandardButton button1,
-										 QMessageBox::StandardButton button2);
+	QMessageBox::StandardButton criticalT(QWidget *parent,
+										  const QString &windowTitle,
+										  const QString &text,
+										  QMessageBox::StandardButtons buttons = QMessageBox::Ok,
+										  QMessageBox::StandardButton defaultButton = QMessageBox::Ok,
+										  QMessageBox::StandardButton escapeButton = QMessageBox::Cancel);
+
+	MessageBoxInfo createCritical(const QString &text = QString(), QWidget *parent = Q_NULLPTR);
 
 	// ---------- QInputDialog ----------
 	double getDouble(QWidget *parent,
