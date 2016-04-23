@@ -6,6 +6,7 @@
 #include <QPixmap>
 #include <QCheckBox>
 #include <QInputDialog>
+#include <QFileDialog>
 class QProgressDialog;
 
 namespace DialogMaster
@@ -175,6 +176,63 @@ namespace DialogMaster
 									const QString &windowTitle = QString(),
 									int minimumDuration = 250,
 									const QString &cancelButtonText = QString());
+
+	// ---------- QFileDialog ----------
+	QString getExistingDirectory(QWidget *parent = Q_NULLPTR,
+								 const QString &caption = QString(),
+								 const QString &dir = QString(),
+								 QFileDialog::Options options = QFileDialog::ShowDirsOnly);
+
+	QUrl getExistingDirectoryUrl(QWidget *parent = Q_NULLPTR,
+								 const QString &caption = QString(),
+								 const QUrl &dir = QUrl(),
+								 QFileDialog::Options options = QFileDialog::ShowDirsOnly,
+								 const QStringList &supportedSchemes = QStringList());
+
+	QString getOpenFileName(QWidget *parent = Q_NULLPTR,
+							const QString &caption = QString(),
+							const QString &dir = QString(),
+							const QString &filter = QString(),
+							QString *selectedFilter = Q_NULLPTR,
+							QFileDialog::Options options = QFileDialog::Options());
+
+	QStringList getOpenFileNames(QWidget *parent = Q_NULLPTR,
+								 const QString &caption = QString(),
+								 const QString &dir = QString(),
+								 const QString &filter = QString(),
+								 QString *selectedFilter = Q_NULLPTR,
+								 QFileDialog::Options options = QFileDialog::Options());
+
+	QUrl getOpenFileUrl(QWidget *parent = Q_NULLPTR,
+						const QString &caption = QString(),
+						const QUrl &dir = QUrl(),
+						const QString &filter = QString(),
+						QString *selectedFilter = Q_NULLPTR,
+						QFileDialog::Options options = QFileDialog::Options(),
+						const QStringList &supportedSchemes = QStringList());
+
+	QList<QUrl>	getOpenFileUrls(QWidget *parent = Q_NULLPTR,
+								const QString &caption = QString(),
+								const QUrl &dir = QUrl(),
+								const QString &filter = QString(),
+								QString *selectedFilter = Q_NULLPTR,
+								QFileDialog::Options options = QFileDialog::Options(),
+								const QStringList &supportedSchemes = QStringList());
+
+	QString	getSaveFileName(QWidget *parent = Q_NULLPTR,
+							const QString &caption = QString(),
+							const QString &dir = QString(),
+							const QString &filter = QString(),
+							QString *selectedFilter = Q_NULLPTR,
+							QFileDialog::Options options = QFileDialog::Options());
+
+	QUrl getSaveFileUrl(QWidget *parent = Q_NULLPTR,
+						const QString &caption = QString(),
+						const QUrl &dir = QUrl(),
+						const QString &filter = QString(),
+						QString *selectedFilter = Q_NULLPTR,
+						QFileDialog::Options options = QFileDialog::Options(),
+						const QStringList &supportedSchemes = QStringList());
 }
 
 #endif // MESSAGEMASTER_H

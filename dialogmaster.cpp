@@ -3,6 +3,7 @@
 #include <QPushButton>
 #include <QProgressDialog>
 #include <QProgressBar>
+#include <QFileDialog>
 
 class CloseFilter : public QObject
 {
@@ -426,4 +427,162 @@ QProgressDialog *DialogMaster::createProgress(QWidget *parent, const QString &la
 	dialog->setValue(min);
 
 	return dialog;
+}
+
+QString DialogMaster::getExistingDirectory(QWidget *parent, const QString &caption, const QString &dir, QFileDialog::Options options)
+{
+	QFileDialog dialog(parent, caption);
+	DialogMaster::masterDialog(&dialog);
+	dialog.setWindowTitle(caption);
+
+	dialog.setAcceptMode(QFileDialog::AcceptOpen);
+	dialog.setFileMode(QFileDialog::Directory);
+	dialog.setOptions(options);
+	dialog.setDirectory(dir);
+
+	if(dialog.exec() == QDialog::Accepted)
+		return dialog.selectedFiles().first();
+	else
+		return QString();
+}
+
+QUrl DialogMaster::getExistingDirectoryUrl(QWidget *parent, const QString &caption, const QUrl &dir, QFileDialog::Options options, const QStringList &supportedSchemes)
+{
+	QFileDialog dialog(parent, caption);
+	DialogMaster::masterDialog(&dialog);
+	dialog.setWindowTitle(caption);
+
+	dialog.setAcceptMode(QFileDialog::AcceptOpen);
+	dialog.setFileMode(QFileDialog::Directory);
+	dialog.setOptions(options);
+	dialog.setDirectoryUrl(dir);
+	dialog.setSupportedSchemes(supportedSchemes);
+
+	if(dialog.exec() == QDialog::Accepted)
+		return dialog.selectedUrls().first();
+	else
+		return QUrl();
+}
+
+QString DialogMaster::getOpenFileName(QWidget *parent, const QString &caption, const QString &dir, const QString &filter, QString *selectedFilter, QFileDialog::Options options)
+{
+	QFileDialog dialog(parent, caption);
+	DialogMaster::masterDialog(&dialog);
+	dialog.setWindowTitle(caption);
+
+	dialog.setAcceptMode(QFileDialog::AcceptOpen);
+	dialog.setFileMode(QFileDialog::ExistingFile);
+	dialog.setOptions(options);
+	dialog.setDirectory(dir);
+	dialog.setNameFilter(filter);
+	if(selectedFilter != Q_NULLPTR)
+		dialog.selectNameFilter(*selectedFilter);
+
+	if(dialog.exec() == QDialog::Accepted)
+		return dialog.selectedFiles().first();
+	else
+		return QString();
+}
+
+QStringList DialogMaster::getOpenFileNames(QWidget *parent, const QString &caption, const QString &dir, const QString &filter, QString *selectedFilter, QFileDialog::Options options)
+{
+	QFileDialog dialog(parent, caption);
+	DialogMaster::masterDialog(&dialog);
+	dialog.setWindowTitle(caption);
+
+	dialog.setAcceptMode(QFileDialog::AcceptOpen);
+	dialog.setFileMode(QFileDialog::ExistingFiles);
+	dialog.setOptions(options);
+	dialog.setDirectory(dir);
+	dialog.setNameFilter(filter);
+	if(selectedFilter != Q_NULLPTR)
+		dialog.selectNameFilter(*selectedFilter);
+
+	if(dialog.exec() == QDialog::Accepted)
+		return dialog.selectedFiles();
+	else
+		return QStringList();
+}
+
+QUrl DialogMaster::getOpenFileUrl(QWidget *parent, const QString &caption, const QUrl &dir, const QString &filter, QString *selectedFilter, QFileDialog::Options options, const QStringList &supportedSchemes)
+{
+	QFileDialog dialog(parent, caption);
+	DialogMaster::masterDialog(&dialog);
+	dialog.setWindowTitle(caption);
+
+	dialog.setAcceptMode(QFileDialog::AcceptOpen);
+	dialog.setFileMode(QFileDialog::ExistingFile);
+	dialog.setOptions(options);
+	dialog.setDirectoryUrl(dir);
+	dialog.setSupportedSchemes(supportedSchemes);
+	dialog.setNameFilter(filter);
+	if(selectedFilter != Q_NULLPTR)
+		dialog.selectNameFilter(*selectedFilter);
+
+	if(dialog.exec() == QDialog::Accepted)
+		return dialog.selectedUrls().first();
+	else
+		return QUrl();
+}
+
+QList<QUrl> DialogMaster::getOpenFileUrls(QWidget *parent, const QString &caption, const QUrl &dir, const QString &filter, QString *selectedFilter, QFileDialog::Options options, const QStringList &supportedSchemes)
+{
+	QFileDialog dialog(parent, caption);
+	DialogMaster::masterDialog(&dialog);
+	dialog.setWindowTitle(caption);
+
+	dialog.setAcceptMode(QFileDialog::AcceptOpen);
+	dialog.setFileMode(QFileDialog::ExistingFiles);
+	dialog.setOptions(options);
+	dialog.setDirectoryUrl(dir);
+	dialog.setSupportedSchemes(supportedSchemes);
+	dialog.setNameFilter(filter);
+	if(selectedFilter != Q_NULLPTR)
+		dialog.selectNameFilter(*selectedFilter);
+
+	if(dialog.exec() == QDialog::Accepted)
+		return dialog.selectedUrls();
+	else
+		return QList<QUrl>();
+}
+
+QString DialogMaster::getSaveFileName(QWidget *parent, const QString &caption, const QString &dir, const QString &filter, QString *selectedFilter, QFileDialog::Options options)
+{
+	QFileDialog dialog(parent, caption);
+	DialogMaster::masterDialog(&dialog);
+	dialog.setWindowTitle(caption);
+
+	dialog.setAcceptMode(QFileDialog::AcceptSave);
+	dialog.setFileMode(QFileDialog::ExistingFile);
+	dialog.setOptions(options);
+	dialog.setDirectory(dir);
+	dialog.setNameFilter(filter);
+	if(selectedFilter != Q_NULLPTR)
+		dialog.selectNameFilter(*selectedFilter);
+
+	if(dialog.exec() == QDialog::Accepted)
+		return dialog.selectedFiles().first();
+	else
+		return QString();
+}
+
+QUrl DialogMaster::getSaveFileUrl(QWidget *parent, const QString &caption, const QUrl &dir, const QString &filter, QString *selectedFilter, QFileDialog::Options options, const QStringList &supportedSchemes)
+{
+	QFileDialog dialog(parent, caption);
+	DialogMaster::masterDialog(&dialog);
+	dialog.setWindowTitle(caption);
+
+	dialog.setAcceptMode(QFileDialog::AcceptSave);
+	dialog.setFileMode(QFileDialog::ExistingFile);
+	dialog.setOptions(options);
+	dialog.setDirectoryUrl(dir);
+	dialog.setSupportedSchemes(supportedSchemes);
+	dialog.setNameFilter(filter);
+	if(selectedFilter != Q_NULLPTR)
+		dialog.selectNameFilter(*selectedFilter);
+
+	if(dialog.exec() == QDialog::Accepted)
+		return dialog.selectedUrls().first();
+	else
+		return QUrl();
 }
