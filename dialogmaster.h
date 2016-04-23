@@ -173,7 +173,7 @@ namespace DialogMaster
 									const int min = 0,
 									bool allowCancel = true,
 									const QString &windowTitle = QString(),
-									int minimumDuration = 1000,
+									int minimumDuration = 250,
 									const QString &cancelButtonText = QString());
 }
 
