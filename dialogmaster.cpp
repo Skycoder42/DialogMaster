@@ -478,9 +478,11 @@ QString DialogMaster::getOpenFileName(QWidget *parent, const QString &caption, c
 	if(selectedFilter != Q_NULLPTR)
 		dialog.selectNameFilter(*selectedFilter);
 
-	if(dialog.exec() == QDialog::Accepted)
+	if(dialog.exec() == QDialog::Accepted) {
+		if(selectedFilter != Q_NULLPTR)
+			*selectedFilter = dialog.selectedNameFilter();
 		return dialog.selectedFiles().first();
-	else
+	} else
 		return QString();
 }
 
@@ -498,9 +500,11 @@ QStringList DialogMaster::getOpenFileNames(QWidget *parent, const QString &capti
 	if(selectedFilter != Q_NULLPTR)
 		dialog.selectNameFilter(*selectedFilter);
 
-	if(dialog.exec() == QDialog::Accepted)
+	if(dialog.exec() == QDialog::Accepted) {
+		if(selectedFilter != Q_NULLPTR)
+			*selectedFilter = dialog.selectedNameFilter();
 		return dialog.selectedFiles();
-	else
+	} else
 		return QStringList();
 }
 
@@ -519,9 +523,11 @@ QUrl DialogMaster::getOpenFileUrl(QWidget *parent, const QString &caption, const
 	if(selectedFilter != Q_NULLPTR)
 		dialog.selectNameFilter(*selectedFilter);
 
-	if(dialog.exec() == QDialog::Accepted)
+	if(dialog.exec() == QDialog::Accepted) {
+		if(selectedFilter != Q_NULLPTR)
+			*selectedFilter = dialog.selectedNameFilter();
 		return dialog.selectedUrls().first();
-	else
+	} else
 		return QUrl();
 }
 
@@ -540,9 +546,11 @@ QList<QUrl> DialogMaster::getOpenFileUrls(QWidget *parent, const QString &captio
 	if(selectedFilter != Q_NULLPTR)
 		dialog.selectNameFilter(*selectedFilter);
 
-	if(dialog.exec() == QDialog::Accepted)
+	if(dialog.exec() == QDialog::Accepted) {
+		if(selectedFilter != Q_NULLPTR)
+			*selectedFilter = dialog.selectedNameFilter();
 		return dialog.selectedUrls();
-	else
+	} else
 		return QList<QUrl>();
 }
 
@@ -560,9 +568,11 @@ QString DialogMaster::getSaveFileName(QWidget *parent, const QString &caption, c
 	if(selectedFilter != Q_NULLPTR)
 		dialog.selectNameFilter(*selectedFilter);
 
-	if(dialog.exec() == QDialog::Accepted)
+	if(dialog.exec() == QDialog::Accepted) {
+		if(selectedFilter != Q_NULLPTR)
+			*selectedFilter = dialog.selectedNameFilter();
 		return dialog.selectedFiles().first();
-	else
+	} else
 		return QString();
 }
 
@@ -581,8 +591,10 @@ QUrl DialogMaster::getSaveFileUrl(QWidget *parent, const QString &caption, const
 	if(selectedFilter != Q_NULLPTR)
 		dialog.selectNameFilter(*selectedFilter);
 
-	if(dialog.exec() == QDialog::Accepted)
+	if(dialog.exec() == QDialog::Accepted) {
+		if(selectedFilter != Q_NULLPTR)
+			*selectedFilter = dialog.selectedNameFilter();
 		return dialog.selectedUrls().first();
-	else
+	} else
 		return QUrl();
 }
