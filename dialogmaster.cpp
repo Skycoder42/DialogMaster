@@ -49,7 +49,7 @@ DialogMaster::MessageBoxInfo::MessageBoxInfo() :
 	buttonTexts()
 {}
 
-QMessageBox *DialogMaster::createMsgBox(const DialogMaster::MessageBoxInfo &setup)
+QMessageBox *DialogMaster::createMessageBox(const DialogMaster::MessageBoxInfo &setup)
 {
 	QMessageBox *msgBox = new QMessageBox(setup.parent);
 	if(setup.icon.isCustom)
@@ -101,9 +101,9 @@ QMessageBox *DialogMaster::createMsgBox(const DialogMaster::MessageBoxInfo &setu
 	return msgBox;
 }
 
-QMessageBox::StandardButton DialogMaster::msgBox(const MessageBoxInfo &setup)
+QMessageBox::StandardButton DialogMaster::messageBox(const MessageBoxInfo &setup)
 {
-	QScopedPointer<QMessageBox> box(DialogMaster::createMsgBox(setup));
+	QScopedPointer<QMessageBox> box(DialogMaster::createMessageBox(setup));
 	return (QMessageBox::StandardButton)box->exec();
 }
 
@@ -116,7 +116,7 @@ QMessageBox::StandardButton DialogMaster::information(QWidget *parent, const QSt
 	info.buttons = buttons;
 	info.defaultButton = defaultButton;
 	info.escapeButton = escapeButton;
-	return msgBox(info);
+	return messageBox(info);
 }
 
 QMessageBox::StandardButton DialogMaster::informationT(QWidget *parent, const QString &windowTitle, const QString &text, QMessageBox::StandardButtons buttons, QMessageBox::StandardButton defaultButton, QMessageBox::StandardButton escapeButton)
@@ -126,7 +126,7 @@ QMessageBox::StandardButton DialogMaster::informationT(QWidget *parent, const QS
 	info.buttons = buttons;
 	info.defaultButton = defaultButton;
 	info.escapeButton = escapeButton;
-	return msgBox(info);
+	return messageBox(info);
 }
 
 DialogMaster::MessageBoxInfo DialogMaster::createInformation(const QString &text, QWidget *parent)
@@ -151,7 +151,7 @@ QMessageBox::StandardButton DialogMaster::question(QWidget *parent, const QStrin
 	info.buttons = buttons;
 	info.defaultButton = defaultButton;
 	info.escapeButton = escapeButton;
-	return msgBox(info);
+	return messageBox(info);
 }
 
 QMessageBox::StandardButton DialogMaster::questionT(QWidget *parent, const QString &windowTitle, const QString &text, QMessageBox::StandardButtons buttons, QMessageBox::StandardButton defaultButton, QMessageBox::StandardButton escapeButton)
@@ -161,7 +161,7 @@ QMessageBox::StandardButton DialogMaster::questionT(QWidget *parent, const QStri
 	info.buttons = buttons;
 	info.defaultButton = defaultButton;
 	info.escapeButton = escapeButton;
-	return msgBox(info);
+	return messageBox(info);
 }
 
 DialogMaster::MessageBoxInfo DialogMaster::createQuestion(const QString &text, QWidget *parent)
@@ -186,7 +186,7 @@ QMessageBox::StandardButton DialogMaster::warning(QWidget *parent, const QString
 	info.buttons = buttons;
 	info.defaultButton = defaultButton;
 	info.escapeButton = escapeButton;
-	return msgBox(info);
+	return messageBox(info);
 }
 
 QMessageBox::StandardButton DialogMaster::warningT(QWidget *parent, const QString &windowTitle, const QString &text, QMessageBox::StandardButtons buttons, QMessageBox::StandardButton defaultButton, QMessageBox::StandardButton escapeButton)
@@ -196,7 +196,7 @@ QMessageBox::StandardButton DialogMaster::warningT(QWidget *parent, const QStrin
 	info.buttons = buttons;
 	info.defaultButton = defaultButton;
 	info.escapeButton = escapeButton;
-	return msgBox(info);
+	return messageBox(info);
 }
 
 DialogMaster::MessageBoxInfo DialogMaster::createWarning(const QString &text, QWidget *parent)
@@ -221,7 +221,7 @@ QMessageBox::StandardButton DialogMaster::critical(QWidget *parent, const QStrin
 	info.buttons = buttons;
 	info.defaultButton = defaultButton;
 	info.escapeButton = escapeButton;
-	return msgBox(info);
+	return messageBox(info);
 }
 
 QMessageBox::StandardButton DialogMaster::criticalT(QWidget *parent, const QString &windowTitle, const QString &text, QMessageBox::StandardButtons buttons, QMessageBox::StandardButton defaultButton, QMessageBox::StandardButton escapeButton)
@@ -231,7 +231,7 @@ QMessageBox::StandardButton DialogMaster::criticalT(QWidget *parent, const QStri
 	info.buttons = buttons;
 	info.defaultButton = defaultButton;
 	info.escapeButton = escapeButton;
-	return msgBox(info);
+	return messageBox(info);
 }
 
 DialogMaster::MessageBoxInfo DialogMaster::createCritical(const QString &text, QWidget *parent)
@@ -597,4 +597,37 @@ QUrl DialogMaster::getSaveFileUrl(QWidget *parent, const QString &caption, const
 		return dialog.selectedUrls().first();
 	} else
 		return QUrl();
+}
+
+QColor DialogMaster::getColor(const QColor &initial, QWidget *parent, const QString &title, QColorDialog::ColorDialogOptions options)
+{
+	QColorDialog dialog(initial, parent);
+	DialogMaster::masterDialog(&dialog, true);
+
+	dialog.setWindowTitle(title);
+	dialog.setOptions(options);
+
+	if(dialog.exec() == QDialog::Accepted)
+		return dialog.currentColor();
+	else
+		return QColor();
+}
+
+QFont DialogMaster::getFont(bool *ok, const QFont &initial, QWidget *parent, const QString &title, QFontDialog::FontDialogOptions options)
+{
+	QFontDialog dialog(initial, parent);
+	DialogMaster::masterDialog(&dialog, true);
+
+	dialog.setWindowTitle(title);
+	dialog.setOptions(options);
+
+	if(dialog.exec() == QDialog::Accepted) {
+		if(ok)
+			*ok = true;
+		return dialog.currentFont();
+	} else {
+		if(ok)
+			*ok = false;
+		return QFont();
+	}
 }

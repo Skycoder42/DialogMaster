@@ -7,6 +7,8 @@
 #include <QCheckBox>
 #include <QInputDialog>
 #include <QFileDialog>
+#include <QColorDialog>
+#include <QFontDialog>
 class QProgressDialog;
 
 namespace DialogMaster
@@ -44,8 +46,8 @@ namespace DialogMaster
 		MessageBoxInfo();
 	};
 
-	QMessageBox *createMsgBox(const MessageBoxInfo &setup);
-	QMessageBox::StandardButton msgBox(const MessageBoxInfo &setup);
+	QMessageBox *createMessageBox(const MessageBoxInfo &setup);
+	QMessageBox::StandardButton messageBox(const MessageBoxInfo &setup);
 
 
 
@@ -233,6 +235,19 @@ namespace DialogMaster
 						QString *selectedFilter = Q_NULLPTR,
 						QFileDialog::Options options = QFileDialog::Options(),
 						const QStringList &supportedSchemes = QStringList());
+
+	// ---------- QColorDialog ----------
+	QColor getColor(const QColor &initial = Qt::white,
+					QWidget *parent = Q_NULLPTR,
+					const QString &title = QString(),
+					QColorDialog::ColorDialogOptions options = QColorDialog::ColorDialogOptions());
+
+	// ---------- QFontDialog ----------
+	QFont getFont(bool *ok,
+				  const QFont &initial,
+				  QWidget *parent = Q_NULLPTR,
+				  const QString &title = QString(),
+				  QFontDialog::FontDialogOptions options = QFontDialog::FontDialogOptions());
 }
 
 #endif // MESSAGEMASTER_H
