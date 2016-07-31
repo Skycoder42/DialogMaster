@@ -4,6 +4,7 @@
 #include <QProgressDialog>
 #include <QProgressBar>
 #include <QFileDialog>
+#include <QApplication>
 
 class CloseFilter : public QObject
 {
@@ -247,6 +248,27 @@ DialogMaster::MessageBoxInfo DialogMaster::createCritical(const QString &text, Q
 	return info;
 }
 
+void DialogMaster::about(QWidget *parent, const QString &content, bool includeCompany, const QUrl &companyUrl)
+{
+	auto info = DialogMaster::createInformation(QString(), parent);
+	auto appIcon = QApplication::windowIcon();
+	if(!appIcon.isNull())
+		info.icon = appIcon;
+	info.windowTitle = QCoreApplication::translate("DialogMaster", "About");
+	info.title = QCoreApplication::translate("DialogMaster", "%1 — Version %2")
+				 .arg(QApplication::applicationDisplayName())
+				 .arg(QApplication::applicationVersion());
+	info.text = content;
+	if(includeCompany) {
+		info.text.append(QCoreApplication::translate("DialogMaster", "<p>Developed by: <a href=\"%1\">%2</a></p>")
+						 .arg(companyUrl.toString())
+						 .arg(QApplication::organizationName()));
+	}
+
+	DialogMaster::messageBox(info);
+}
+
+
 
 
 
@@ -267,6 +289,8 @@ DialogMaster::MessageBoxIcon::MessageBoxIcon(const QIcon &custIcon) :
 	mbxIcon(),
 	custIcon(custIcon.pixmap(64, 64))
 {}
+
+
 
 double DialogMaster::getDouble(QWidget *parent, const QString &label, double value, double min, double max, const QString &title, int decimals, bool *ok)
 {
@@ -402,6 +426,8 @@ QString DialogMaster::getText(QWidget *parent, const QString &label, const QStri
 	}
 }
 
+
+
 QProgressDialog *DialogMaster::createProgress(QWidget *parent, const QString &label, const int max, const int min, bool allowCancel, const QString &windowTitle, int minimumDuration, const QString &cancelButtonText)
 {
 	QProgressDialog *dialog = new QProgressDialog(parent);
@@ -428,6 +454,8 @@ QProgressDialog *DialogMaster::createProgress(QWidget *parent, const QString &la
 
 	return dialog;
 }
+
+
 
 QString DialogMaster::getExistingDirectory(QWidget *parent, const QString &caption, const QString &dir, QFileDialog::Options options)
 {
@@ -599,6 +627,8 @@ QUrl DialogMaster::getSaveFileUrl(QWidget *parent, const QString &caption, const
 		return QUrl();
 }
 
+
+
 QColor DialogMaster::getColor(const QColor &initial, QWidget *parent, const QString &title, QColorDialog::ColorDialogOptions options)
 {
 	QColorDialog dialog(initial, parent);
@@ -612,6 +642,8 @@ QColor DialogMaster::getColor(const QColor &initial, QWidget *parent, const QStr
 	else
 		return QColor();
 }
+
+
 
 QFont DialogMaster::getFont(bool *ok, const QFont &initial, QWidget *parent, const QString &title, QFontDialog::FontDialogOptions options)
 {
