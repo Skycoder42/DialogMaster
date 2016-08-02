@@ -67,8 +67,9 @@ QMessageBox *DialogMaster::createMessageBox(const DialogMaster::MessageBoxInfo &
 	if(setup.checked) {
 		QCheckBox *box = new QCheckBox(setup.checkString, msgBox);
 		box->setChecked(*setup.checked);
-		QObject::connect(box, &QCheckBox::toggled, msgBox, [&](bool isChecked){
-			*setup.checked = isChecked;
+		bool *checkedPointer = setup.checked;
+		QObject::connect(box, &QCheckBox::toggled, msgBox, [checkedPointer](bool isChecked){
+			*checkedPointer = isChecked;
 		});
 		msgBox->setCheckBox(box);
 	}
