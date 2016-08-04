@@ -1,2 +1,2 @@
-# DialogMaster
-An utility to create optimized dialogs with Qt
+# DECREPATED
+Use https://github.com/Skycoder42/QtUtils/tree/DialogMaster instead
