@@ -1,0 +1,6 @@
+
+<RCC>
+    <qresource prefix="/com/github/noreply/users/DialogMaster">
+        <file>qmldir</file>
+    </qresource>
+</RCC>
