@@ -1,6 +1,6 @@
 
 <RCC>
-    <qresource prefix="/com/github/noreply/users/DialogMaster">
+    <qresource prefix="/de/skycoder42/DialogMaster">
         <file>qmldir</file>
     </qresource>
 </RCC>
