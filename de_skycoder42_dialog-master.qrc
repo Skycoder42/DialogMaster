@@ -1,6 +1,0 @@
-
-<RCC>
-    <qresource prefix="/de/skycoder42/dialog-master">
-        <file>qmldir</file>
-    </qresource>
-</RCC>
