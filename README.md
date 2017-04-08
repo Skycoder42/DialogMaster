@@ -12,3 +12,6 @@ The dialogs include:
 - QFileDialog
 - QColorDialog
 - QFontDialog
+
+## Installation
+The package is providet as qpm package, [`de.skycoder42.dialog-master`](https://www.qpm.io/packages/de.skycoder42.dialog-master/index.html). Check their [GitHub readme](https://github.com/Cutehacks/qpm/blob/master/README.md#usage-for-app-developers) to learn how to use qpm for your projects - it's fairly simple!
