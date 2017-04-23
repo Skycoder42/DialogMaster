@@ -590,7 +590,7 @@ QString DialogMaster::getSaveFileName(QWidget *parent, const QString &caption, c
 	dialog.setWindowTitle(caption);
 
 	dialog.setAcceptMode(QFileDialog::AcceptSave);
-	dialog.setFileMode(QFileDialog::ExistingFile);
+	dialog.setFileMode(QFileDialog::AnyFile);
 	dialog.setOptions(options);
 	dialog.setDirectory(dir);
 	dialog.setNameFilter(filter);
@@ -612,7 +612,7 @@ QUrl DialogMaster::getSaveFileUrl(QWidget *parent, const QString &caption, const
 	dialog.setWindowTitle(caption);
 
 	dialog.setAcceptMode(QFileDialog::AcceptSave);
-	dialog.setFileMode(QFileDialog::ExistingFile);
+	dialog.setFileMode(QFileDialog::AnyFile);
 	dialog.setOptions(options);
 	dialog.setDirectoryUrl(dir);
 	dialog.setSupportedSchemes(supportedSchemes);
