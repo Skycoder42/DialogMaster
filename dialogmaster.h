@@ -119,7 +119,14 @@ namespace DialogMaster
 
 	MessageBoxInfo createCritical(const QString &text = QString(), QWidget *parent = Q_NULLPTR);
 
-	void about(QWidget *parent, const QString &content, bool includeCompany = true, const QUrl &companyUrl = QUrl());
+	void about(QWidget *parent,
+			   const QString &content,
+			   const QUrl &websiteUrl = QUrl(),
+			   const QString &licenseName = QString(),
+			   const QUrl &licenseUrl = QUrl(),
+			   const QString &companyName = QString(),
+			   bool addQtInfo = true,
+			   const QString &extraVersionInfo = QString());
 
 	// ---------- QInputDialog ----------
 	double getDouble(QWidget *parent,

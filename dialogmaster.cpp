@@ -249,24 +249,69 @@ DialogMaster::MessageBoxInfo DialogMaster::createCritical(const QString &text, Q
 	return info;
 }
 
-void DialogMaster::about(QWidget *parent, const QString &content, bool includeCompany, const QUrl &companyUrl)
+void DialogMaster::about(QWidget *parent, const QString &content, const QUrl &websiteUrl, const QString &licenseName, const QUrl &licenseUrl, const QString &companyName, bool addQtInfo, const QString &extraVersionInfo)
 {
-	auto info = DialogMaster::createInformation(QString(), parent);
+	auto info = DialogMaster::createInformation();
+	info.parent = parent;
 	auto appIcon = QApplication::windowIcon();
-	if(!appIcon.isNull())
+	if(!appIcon.availableSizes().isEmpty())
 		info.icon = appIcon;
 	info.windowTitle = QCoreApplication::translate("DialogMaster", "About");
 	info.title = QCoreApplication::translate("DialogMaster", "%1 — Version %2")
 				 .arg(QApplication::applicationDisplayName())
 				 .arg(QApplication::applicationVersion());
-	info.text = content;
-	if(includeCompany) {
-		info.text.append(QCoreApplication::translate("DialogMaster", "<p>Developed by: <a href=\"%1\">%2</a></p>")
-						 .arg(companyUrl.toString())
-						 .arg(QApplication::organizationName()));
+
+	static const QString pBegin = QStringLiteral("<p>");
+	static const QString pEnd = QStringLiteral("</p>");
+	static const QString br = QStringLiteral("<br/>");
+
+	//basic text
+	info.text = pBegin + content + pEnd;
+	//qt version info
+	if(addQtInfo || !extraVersionInfo.isEmpty()) {
+		info.text += pBegin;
+		if(!extraVersionInfo.isEmpty()) {
+			info.text += extraVersionInfo;
+			if(addQtInfo)
+				info.text += br;
+		}
+		if(addQtInfo) {
+			info.text += QCoreApplication::translate("DialogMaster", "Qt-Version: <a href=\"https://www.qt.io/\">%2</a>")
+						 .arg(QStringLiteral(QT_VERSION_STR));
+		}
+		info.text += pEnd;
+	}
+	//Developer info
+	info.text += pBegin + QCoreApplication::translate("DialogMaster", "Developed by: %1")
+				 .arg(companyName.isEmpty() ? QCoreApplication::organizationName() : companyName);
+	if(websiteUrl.isValid()) {
+		info.text += br + QCoreApplication::translate("DialogMaster", "Project Website: <a href=\"%1\">%2</a>")
+					 .arg(QString::fromUtf8(websiteUrl.toEncoded()))
+					 .arg(websiteUrl.toString());
+	}
+	if(!licenseName.isEmpty()) {
+		if(licenseUrl.isValid()) {
+			info.text += br + QCoreApplication::translate("DialogMaster", "License: <a href=\"%1\">%2</a>")
+						 .arg(QString::fromUtf8(licenseUrl.toEncoded()))
+						 .arg(licenseName);
+		} else {
+			info.text += br + QCoreApplication::translate("DialogMaster", "License: %1")
+						 .arg(licenseName);
+		}
+	}
+	info.text += pEnd;
+
+	info.buttons = QMessageBox::Close;
+	info.defaultButton = QMessageBox::Close;
+	info.escapeButton = QMessageBox::Close;
+	if(addQtInfo) {
+		info.buttons |= QMessageBox::Help;
+		info.buttonTexts.insert(QMessageBox::Help, QCoreApplication::translate("DialogMaster", "About Qt"));
 	}
 
-	DialogMaster::messageBox(info);
+	auto btn = DialogMaster::messageBox(info);
+	if(btn == QMessageBox::Help)
+		QApplication::aboutQt();
 }
 
 
