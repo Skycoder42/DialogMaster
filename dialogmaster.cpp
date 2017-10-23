@@ -254,7 +254,7 @@ void DialogMaster::about(QWidget *parent, const QString &content, const QUrl &we
 	auto info = DialogMaster::createInformation();
 	info.parent = parent;
 	auto appIcon = QApplication::windowIcon();
-	if(!appIcon.availableSizes().isEmpty())
+	if(!appIcon.isNull())
 		info.icon = appIcon;
 	info.windowTitle = QCoreApplication::translate("DialogMaster", "About");
 	info.title = QCoreApplication::translate("DialogMaster", "%1 — Version %2")
